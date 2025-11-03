@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Editor Presell — ProstaVive (Editable)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#f59e0b;
+      --accent-dark:#fbbf24;
+      --primary:#0a2342;
+      --muted:#7a7a7a;
+      --card-bg:#fff;
+      --bg:#f8fafc;
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Poppins',sans-serif;margin:0;background:var(--bg);color:#1e293b}
+    .app {
+      display:grid;
+      grid-template-columns:360px 1fr;
+      min-height:100vh;
+    }
+    /* Sidebar editor */
+    .editor {
+      background:#fff;
+      border-right:1px solid #e6eef8;
+      padding:18px;
+      overflow:auto;
+    }
+    .editor h2{font-size:18px;margin:8px 0 12px}
+    .field{margin-bottom:12px}
+    .field label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
+    .field input[type="text"], .field input[type="url"], .field textarea, .field select {
+      width:100%; padding:10px;border-radius:8px;border:1px solid #e2e8f0;font-size:14px;
+    }
+    .small{font-size:12px;color:var(--muted)}
+    .btn {display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;border:none;cursor:pointer}
+    .btn-save{background:var(--primary);color:#fff;margin-right:8px}
+    .btn-export{background:var(--accent);color:#072033}
+    .btn-danger{background:#ef4444;color:#fff}
+    .row{display:flex;gap:8px}
+    .muted{color:var(--muted);font-size:13px}
+    .section-divider{height:1px;background:#eef5ff;margin:14px 0;border-radius:2px}
+    .list{background:#fbfdff;padding:10px;border-radius:8px;border:1px dashed #e6eef8}
+    .list-item{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #f3f7fb}
+    .list-item:last-child{border-bottom:0}
+    .icon-btn{background:#f1f7ff;border-radius:6px;padding:6px}
+    /* Preview area */
+    .preview {
+      overflow:auto;
+      min-height:100vh;
+      background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+    }
+    /* Use the user's design adapted from provided code */
+    header.preview-header{
+      background:linear-gradient(135deg,var(--primary),#1e3a8a);
+      color:#fff;
+      text-align:center;
+      padding:40px 20px;
+      border-bottom:6px solid var(--accent-dark);
+    }
+    header.preview-header h1{font-size:32px;margin:4px 0}
+    header.preview-header p{margin:6px 0;font-size:15px}
+    .hero {
+      height:60vh;
+      background-position:center top;
+      background-size:cover;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+    .cta-large{
+      background:linear-gradient(90deg,var(--accent-dark),var(--accent));
+      color:#072033;
+      font-weight:700;
+      padding:14px 28px;
+      border-radius:50px;
+      text-decoration:none;
+      display:inline-block;
+      box-shadow:0 8px 24px rgba(251,191,36,0.25);
+      transform:translateY(0);
+    }
+    .content{max-width:1100px;margin:32px auto;padding:0 20px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .card{background:var(--card-bg);padding:18px;border-radius:12px;border:1px solid #eef5ff;box-shadow:0 6px 18px rgba(2,6,23,0.03)}
+    .ingredients .card strong{display:block;margin-bottom:6px}
+    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .review-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 8px 20px rgba(2,6,23,0.04)}
+    .review-card .meta{display:flex;gap:12px;align-items:center}
+    .avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #f2f2f2}
+    footer{background:var(--primary);color:#fff;padding:24px;text-align:center;border-top:4px solid var(--accent)}
+    /* responsive editor collapse on small screens */
+    @media (max-width:900px){
+      .app{grid-template-columns:1fr}
+      .editor{position:fixed;z-index:40;left:0;top:0;bottom:0;width:320px;transform:translateX(-380px);transition:transform .25s}
+      .editor.open{transform:translateX(0);box-shadow:0 30px 60px rgba(2,6,23,0.2)}
+      .toggle-editor{position:fixed;right:16px;bottom:16px;z-index:50;padding:12px 14px;border-radius:12px;background:var(--accent);color:#072033}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- EDITOR SIDEBAR -->
+    <aside class="editor" id="editor">
+      <h2>Editor do Presell</h2>
+
+      <div class="field">
+        <label>Nome do produto</label>
+        <input type="text" id="productName" value="ProstaVive">
+        <div class="small">Este nome atualiza títulos, CTA e highlights.</div>
+      </div>
+
+      <div class="field">
+        <label>Título curto / Subtítulo</label>
+        <input type="text" id="subtitle" value="The Natural Secret for Male Balance and Well-Being">
+      </div>
+
+      <div class="field">
+        <label>Link do botão de compra (href)</label>
+        <input type="url" id="buyLink" placeholder="https://seusite.com/checkout" value="#buy">
+      </div>
+
+      <div class="field">
+        <label>Imagem de fundo (desktop) — URL</label>
+        <input type="url" id="bgDesktop" placeholder="URL da imagem desktop" value="https://uploads.onecompiler.io/43v37pq3s/442h2r79d/presell-computador1.png">
+      </div>
+
+      <div class="field">
+        <label>Imagem de fundo (mobile) — URL</label>
+        <input type="url" id="bgMobile" placeholder="URL da imagem mobile" value="https://uploads.onecompiler.io/43v37pq3s/442h2r79d/presell-celular1.png">
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2>Benefícios (cards)</h2>
+      <div id="benefitsList" class="list"></div>
+      <div class="row" style="margin-top:8px">
+        <input id="newBenefit" type="text" placeholder="Adicionar benefício..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6eef8">
+        <button class="btn" id="addBenefit">➕</button>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2>Ingredientes</h2>
+      <div id="ingredientsList" class="list"></div>
+      <div class="row" style="margin-top:8px">
+        <input id="newIngredient" type="text" placeholder="Adicionar ingrediente..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6eef8">
+        <button class="btn" id="addIngredient">➕</button>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2>Reviews</h2>
+      <div id="reviewsList" class="list"></div>
+      <div style="margin-top:8px">
+        <button class="btn" id="addReview">Adicionar review</button>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2>Rodapé & Links</h2>
+      <div class="field">
+        <label>Privacy Policy (URL)</label>
+        <input type="url" id="privacyUrl" value="privacy/privacy.html">
+      </div>
+      <div class="field">
+        <label>Terms (URL)</label>
+        <input type="url" id="termsUrl" value="terms.html">
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-save" id="saveBtn">Salvar (local)</button>
+        <button class="btn btn-export" id="exportBtn">Exportar HTML</button>
+        <button class="btn btn-danger" id="resetBtn">Resetar para padrão</button>
+      </div>
+
+      <p style="margin-top:14px;font-size:12px;color:var(--muted)">
+        Dica: coloque URLs de imagens públicas (ou do seu servidor). O botão "Exportar" gerará um HTML standalone pronto para hospedar.
+      </p>
+    </aside>
+
+    <!-- PREVIEW -->
+    <main class="preview" id="previewArea">
+      <!-- header -->
+      <header class="preview-header">
+        <h1 id="previewTitle">ProstaVive 💪</h1>
+        <p id="previewSubtitle">The Natural Secret for Male Balance and Well-Being</p>
+      </header>
+
+      <!-- hero -->
+      <div class="hero" id="hero" style="background-image:url('https://uploads.onecompiler.io/43v37pq3s/442h2r79d/presell-computador1.png')">
+        <a id="ctaBtn" class="cta-large" href="#buy">🔥 I WANT MY PROSTAVIVE NOW</a>
+      </div>
+
+      <div class="content">
+        <section>
+          <h2>🌿 Rediscover Your Natural Vitality</h2>
+          <p><span id="highlightName" style="font-weight:700;color:var(--accent)">ProstaVive</span> is a premium supplement specially developed to support male well-being and vitality. Its 100% natural formula combines plant extracts and essential minerals, offering daily support for a more balanced and confident lifestyle.</p>
+        </section>
+
+        <section>
+          <h2>💥 Exclusive Benefits</h2>
+          <div class="cards" id="benefitsCards"></div>
+        </section>
+
+        <section class="ingredients" style="margin-top:18px">
+          <h2>🌱 Selected Natural Ingredients</h2>
+          <div class="cards" id="ingredientsCards"></div>
+        </section>
+
+        <div class="cta" style="text-align:center;margin:36px 0">
+          <a id="ctaBottom" class="cta-large" href="#buy">🔥 I WANT MY <span id="ctaProduct">PROSTAVIVE</span> NOW</a>
+        </div>
+
+        <section class="testimonials">
+          <h2 style="margin-bottom:16px">What customers are saying</h2>
+          <div class="reviews-grid" id="reviewsGrid"></div>
+          <p style="font-size:12px;color:var(--muted);margin-top:8px">*Results may vary from person to person.</p>
+        </section>
+
+        <footer style="margin-top:40px">
+          <p>© <span id="footerYear"></span> <span id="footerProduct">ProstaVive</span> — <a id="privacyLink" href="privacy/privacy.html" style="color:#dbeafe;text-decoration:underline">Privacy Policy</a> | <a id="termsLink" href="terms.html" style="color:#dbeafe;text-decoration:underline">Terms</a></p>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <!-- toggle editor for small screens -->
+  <button class="toggle-editor" id="toggleEditor" style="display:none">Editor</button>
+
+  <script>
+    /* ---------- App state & defaults (derived from user's provided page) ---------- */
+    const DEFAULT = {
+      productName: "ProstaVive",
+      subtitle: "The Natural Secret for Male Balance and Well-Being",
+      buyLink: "#buy",
+      bgDesktop: "https://uploads.onecompiler.io/43v37pq3s/442h2r79d/presell-computador1.png",
+      bgMobile: "https://uploads.onecompiler.io/43v37pq3s/442h2r79d/presell-celular1.png",
+      benefits: [
+        "✅ Promotes a feeling of well-being and lightness",
+        "✅ Daily support for vitality and energy",
+        "✅ Natural and certified ingredients",
+        "✅ Produced in FDA and GMP facilities",
+        "✅ 60-day satisfaction guarantee"
+      ],
+      ingredients: [
+        "Saw Palmetto: traditionally used to support male balance.",
+        "Nettle Root: contributes to energy and comfort.",
+        "African Pygeum: plant known for natural body support.",
+        "Zinc + Selenium: essential minerals supporting health and vitality."
+      ],
+      reviews: [
+        {name:"Robert M.", text:"I was waking up 4-5 times a night... After using ProstaVive for a month, I’m down to once per night.", rating:5, date:"2025-06-18", avatar:"https://i.pravatar.cc/150?img=12"},
+        {name:"William R.", text:"I’ve been using ProstaVive for a few weeks now, and I’m honestly amazed at how much it has improved my prostate health.", rating:5, date:"2025-07-02", avatar:"https://i.pravatar.cc/150?img=15"},
+        {name:"David P.", text:"My life had changed. My energy returned. I felt younger.", rating:5, date:"2025-05-27", avatar:"https://i.pravatar.cc/150?img=5"}
+      ],
+      privacyUrl: "privacy/privacy.html",
+      termsUrl: "terms.html"
+    };
+
+    // load saved or default
+    const STORAGE_KEY = "presell_editor_state_v1";
+    function loadState(){ try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return {...DEFAULT};
+      return {...DEFAULT, ...JSON.parse(raw)};
+    } catch(e){ console.warn(e); return {...DEFAULT}; } }
+
+    function saveState(state){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    let state = loadState();
+
+    /* ---------- helpers to sync UI <-> state ---------- */
+    // Editor inputs
+    const productNameInput = document.getElementById("productName");
+    const subtitleInput = document.getElementById("subtitle");
+    const buyLinkInput = document.getElementById("buyLink");
+    const bgDesktopInput = document.getElementById("bgDesktop");
+    const bgMobileInput = document.getElementById("bgMobile");
+    const benefitsList = document.getElementById("benefitsList");
+    const ingredientsList = document.getElementById("ingredientsList");
+    const reviewsList = document.getElementById("reviewsList");
+    const benefitsCards = document.getElementById("benefitsCards");
+    const ingredientsCards = document.getElementById("ingredientsCards");
+    const reviewsGrid = document.getElementById("reviewsGrid");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewSubtitle = document.getElementById("previewSubtitle");
+    const highlightName = document.getElementById("highlightName");
+    const ctaBtn = document.getElementById("ctaBtn");
+    const ctaBottom = document.getElementById("ctaBottom");
+    const ctaProduct = document.getElementById("ctaProduct");
+    const hero = document.getElementById("hero");
+    const footerYear = document.getElementById("footerYear");
+    const footerProduct = document.getElementById("footerProduct");
+    const privacyLink = document.getElementById("privacyLink");
+    const termsLink = document.getElementById("termsLink");
+    const addBenefitBtn = document.getElementById("addBenefit");
+    const newBenefitInput = document.getElementById("newBenefit");
+    const addIngredientBtn = document.getElementById("addIngredient");
+    const newIngredientInput = document.getElementById("newIngredient");
+    const addReviewBtn = document.getElementById("addReview");
+    const saveBtn = document.getElementById("saveBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const privacyUrlInput = document.getElementById("privacyUrl");
+    const termsUrlInput = document.getElementById("termsUrl");
+
+    /* init inputs */
+    function populateEditorFromState(){
+      productNameInput.value = state.productName || DEFAULT.productName;
+      subtitleInput.value = state.subtitle || DEFAULT.subtitle;
+      buyLinkInput.value = state.buyLink || DEFAULT.buyLink;
+      bgDesktopInput.value = state.bgDesktop || DEFAULT.bgDesktop;
+      bgMobileInput.value = state.bgMobile || DEFAULT.bgMobile;
+      privacyUrlInput.value = state.privacyUrl || DEFAULT.privacyUrl;
+      termsUrlInput.value = state.termsUrl || DEFAULT.termsUrl;
+    }
+
+    function renderBenefits(){
+      benefitsList.innerHTML = "";
+      benefitsCards.innerHTML = "";
+      state.benefits.forEach((b, i) => {
+        // editor list item
+        const li = document.createElement("div");
+        li.className = "list-item";
+        li.innerHTML = `
+          <input type="text" data-index="${i}" class="benefit-input" style="flex:1;border:0;background:transparent" value="${escapeHtml(b)}">
+          <button class="icon-btn" data-action="del-benefit" data-index="${i}">✖</button>
+        `;
+        benefitsList.appendChild(li);
+
+        // preview card
+        const card = document.createElement("div");
+        card.className = "card";
+        card.textContent = b;
+        benefitsCards.appendChild(card);
+      });
+      // attach events
+      document.querySelectorAll(".benefit-input").forEach(inp=>{
+        inp.addEventListener("input", e=>{
+          const idx = +e.target.dataset.index;
+          state.benefits[idx] = e.target.value;
+          renderBenefits();
+        });
+      });
+      document.querySelectorAll("[data-action='del-benefit']").forEach(btn=>{
+        btn.addEventListener("click", e=>{
+          const idx = +e.target.dataset.index;
+          state.benefits.splice(idx,1);
+          renderBenefits();
+        });
+      });
+    }
+
+    function renderIngredients(){
+      ingredientsList.innerHTML = "";
+      ingredientsCards.innerHTML = "";
+      state.ingredients.forEach((ing, i)=>{
+        const li = document.createElement("div");
+        li.className = "list-item";
+        li.innerHTML = `
+          <input type="text" data-index="${i}" class="ingredient-input" style="flex:1;border:0;background:transparent" value="${escapeHtml(ing)}">
+          <button class="icon-btn" data-action="del-ing" data-index="${i}">✖</button>
+        `;
+        ingredientsList.appendChild(li);
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `<strong>${escapeHtml(ing.split(':')[0] || ing)}</strong><div style="opacity:.9;margin-top:6px">${escapeHtml(ing.split(':').slice(1).join(':') || '')}</div>`;
+        ingredientsCards.appendChild(card);
+      });
+      document.querySelectorAll(".ingredient-input").forEach(inp=>{
+        inp.addEventListener("input", e=>{
+          const idx = +e.target.dataset.index;
+          state.ingredients[idx] = e.target.value;
+          renderIngredients();
+        });
+      });
+      document.querySelectorAll("[data-action='del-ing']").forEach(btn=>{
+        btn.addEventListener("click", e=>{
+          const idx = +e.target.dataset.index;
+          state.ingredients.splice(idx,1);
+          renderIngredients();
+        });
+      });
+    }
+
+    function renderReviews(){
+      reviewsList.innerHTML = "";
+      reviewsGrid.innerHTML = "";
+      state.reviews.forEach((r,i)=>{
+        // editor card
+        const li = document.createElement("div");
+        li.className = "list-item";
+        li.style.flexDirection="column";
+        li.innerHTML = `
+          <div style="display:flex;gap:8px;width:100%;">
+            <input type="text" data-index="${i}" class="rev-name" value="${escapeHtml(r.name)}" style="flex:1;border:0;background:transparent">
+            <select data-index="${i}" class="rev-rating">
+              <option ${r.rating==5?'selected':''} value="5">5★</option>
+              <option ${r.rating==4?'selected':''} value="4">4★</option>
+              <option ${r.rating==3?'selected':''} value="3">3★</option>
+              <option ${r.rating==2?'selected':''} value="2">2★</option>
+              <option ${r.rating==1?'selected':''} value="1">1★</option>
+            </select>
+            <button class="icon-btn" data-action="del-review" data-index="${i}">✖</button>
+          </div>
+          <textarea data-index="${i}" class="rev-text" style="width:100%;border:0;background:transparent;margin-top:8px" rows="3">${escapeHtml(r.text)}</textarea>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <input type="url" data-index="${i}" class="rev-avatar" placeholder="avatar URL" value="${escapeHtml(r.avatar || '')}" style="flex:1;border:0;background:transparent">
+            <input type="date" data-index="${i}" class="rev-date" value="${r.date || ''}">
+          </div>
+        `;
+        reviewsList.appendChild(li);
+
+        // preview review
+        const rc = document.createElement("article");
+        rc.className = "review-card";
+        rc.innerHTML = `
+          <div class="meta">
+            <img src="${escapeAttr(r.avatar || 'https://i.pravatar.cc/150?img=1')}" class="avatar" onerror="this.src='https://i.pravatar.cc/150?img=1'">
+            <div>
+              <div style="font-weight:700">${escapeHtml(r.name)}</div>
+              <div style="font-size:12px;color:var(--muted)">${r.date || ''}</div>
+            </div>
+          </div>
+          <div style="margin-top:12px">${renderStars(r.rating)}<div style="margin-top:8px">${escapeHtml(r.text)}</div></div>
+        `;
+        reviewsGrid.appendChild(rc);
+      });
+
+      // events
+      document.querySelectorAll(".rev-name").forEach(inp=> inp.addEventListener("input", e=>{
+        const idx = +e.target.dataset.index; state.reviews[idx].name = e.target.value; renderReviews();
+      }));
+      document.querySelectorAll(".rev-text").forEach(inp=> inp.addEventListener("input", e=>{
+        const idx = +e.target.dataset.index; state.reviews[idx].text = e.target.value; renderReviews();
+      }));
+      document.querySelectorAll(".rev-avatar").forEach(inp=> inp.addEventListener("input", e=>{
+        const idx = +e.target.dataset.index; state.reviews[idx].avatar = e.target.value; renderReviews();
+      }));
+      document.querySelectorAll(".rev-rating").forEach(sel=> sel.addEventListener("change", e=>{
+        const idx = +e.target.dataset.index; state.reviews[idx].rating = +e.target.value; renderReviews();
+      }));
+      document.querySelectorAll(".rev-date").forEach(d=> d.addEventListener("change", e=>{
+        const idx = +e.target.dataset.index; state.reviews[idx].date = e.target.value; renderReviews();
+      }));
+      document.querySelectorAll("[data-action='del-review']").forEach(btn=> btn.addEventListener("click", e=>{
+        const idx = +e.target.dataset.index; state.reviews.splice(idx,1); renderReviews();
+      }));
+    }
+
+    function renderAll(){
+      previewTitle.textContent = state.productName;
+      previewSubtitle.textContent = state.subtitle;
+      highlightName.textContent = state.productName;
+      ctaBtn.href = state.buyLink;
+      ctaBottom.href = state.buyLink;
+      ctaBtn.textContent = `🔥 I WANT MY ${state.productName.toUpperCase()} NOW`;
+      ctaBottom.querySelector('span') ? ctaBottom.querySelector('span').textContent = state.productName.toUpperCase() : ctaBottom.textContent = `🔥 I WANT MY ${state.productName.toUpperCase()} NOW`;
+      hero.style.backgroundImage = `url('${state.bgDesktop}')`;
+      // fallback for mobile is not applied here; exported HTML will include mobile media queries if you wish to add
+      footerYear.textContent = new Date().getFullYear();
+      footerProduct.textContent = state.productName;
+      privacyLink.href = state.privacyUrl || DEFAULT.privacyUrl;
+      termsLink.href = state.termsUrl || DEFAULT.termsUrl;
+      renderBenefits();
+      renderIngredients();
+      renderReviews();
+      // persist automatically
+      saveState(state);
+    }
+
+    /* ----- UI actions ----- */
+    productNameInput.addEventListener("input", e=>{ state.productName = e.target.value || DEFAULT.productName; renderAll(); });
+    subtitleInput.addEventListener("input", e=>{ state.subtitle = e.target.value; renderAll(); });
+    buyLinkInput.addEventListener("input", e=>{ state.buyLink = e.target.value; renderAll(); });
+    bgDesktopInput.addEventListener("input", e=>{ state.bgDesktop = e.target.value; renderAll(); });
+    bgMobileInput.addEventListener("input", e=>{ state.bgMobile = e.target.value; renderAll(); });
+    privacyUrlInput.addEventListener("input", e=>{ state.privacyUrl = e.target.value; renderAll(); });
+    termsUrlInput.addEventListener("input", e=>{ state.termsUrl = e.target.value; renderAll(); });
+
+    addBenefitBtn.addEventListener("click", ()=>{
+      const v = newBenefitInput.value.trim();
+      if(!v) return;
+      state.benefits.push(v);
+      newBenefitInput.value="";
+      renderAll();
+    });
+
+    addIngredientBtn.addEventListener("click", ()=>{
+      const v = newIngredientInput.value.trim();
+      if(!v) return;
+      state.ingredients.push(v);
+      newIngredientInput.value="";
+      renderAll();
+    });
+
+    addReviewBtn.addEventListener("click", ()=>{
+      state.reviews.push({name:"New Reviewer", text:"Review text...", rating:5, date:new Date().toISOString().slice(0,10), avatar:""});
+      renderAll();
+      // scroll editor to bottom
+      reviewsList.lastChild?.scrollIntoView({behavior:"smooth", block:"center"});
+    });
+
+    saveBtn.addEventListener("click", ()=>{ saveState(state); alert("Salvo no localStorage!"); });
+
+    resetBtn.addEventListener("click", ()=>{
+      if(!confirm("Resetar tudo para os valores padrão?")) return;
+      state = {...DEFAULT};
+      saveState(state);
+      populateEditorFromState();
+      renderAll();
+    });
+
+    // Export HTML: create standalone file using current state
+    exportBtn.addEventListener("click", ()=>{
+      const html = generateExportHtml(state);
+      const blob = new Blob([html], {type:"text/html;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${(state.productName||'presell').toLowerCase().replace(/\s+/g,'_')}_presell.html`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    /* Utility */
+    function renderStars(n){
+      let s = "";
+      for(let i=0;i<n;i++) s += "★";
+      for(let i=n;i<5;i++) s += "☆";
+      return `<span style="color:#ffc107;font-size:16px">${s}</span>`;
+    }
+
+    function escapeHtml(text){
+      if(text==null) return "";
+      return String(text).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});
+    }
+    function escapeAttr(t){ return escapeHtml(t) }
+
+    /* initial render */
+    populateEditorFromState();
+    renderAll();
+
+    /* enable mobile editor toggle */
+    const editor = document.getElementById("editor");
+    const toggle = document.getElementById("toggleEditor");
+    function checkSmall(){
+      if(window.innerWidth<=900){ toggle.style.display="inline-block"; editor.classList.remove('open'); }
+      else { toggle.style.display="none"; editor.classList.remove('open'); }
+    }
+    checkSmall();
+    window.addEventListener("resize", checkSmall);
+    toggle.addEventListener("click", ()=> editor.classList.toggle('open'));
+
+    /* ---------- Export generator: produce a standalone presell HTML ---------- */
+    function generateExportHtml(st){
+      // simple standalone HTML using inlined styles and content
+      const safe = (s)=> escapeHtml(s||"");
+      const benefitsHtml = (st.benefits || []).map(b=>`<div class="card">${escapeHtml(b)}</div>`).join("\n");
+      const ingredientsHtml = (st.ingredients || []).map(ing=>{
+        const title = escapeHtml((ing.split(':')[0]||ing).trim());
+        const desc = escapeHtml(ing.split(':').slice(1).join(':').trim());
+        return `<div class="card"><strong>${title}</strong><div style="margin-top:6px">${desc}</div></div>`;
+      }).join("\n");
+      const reviewsHtml = (st.reviews || []).map(r=>{
+        return `<article class="review-card">
+          <div class="meta">
+            <img src="${escapeAttr(r.avatar || 'https://i.pravatar.cc/150?img=1')}" class="avatar" onerror="this.src='https://i.pravatar.cc/150?img=1'">
+            <div>
+              <div style="font-weight:700">${escapeHtml(r.name)}</div>
+              <div style="font-size:12px;color:#7a7a7a">${escapeHtml(r.date || '')}</div>
+            </div>
+          </div>
+          <div style="margin-top:12px">${renderStars(r.rating)}<div style="margin-top:8px">${escapeHtml(r.text)}</div></div>
+        </article>`;
+      }).join("\n");
+
+      // exported HTML: keep it simple and include mobile background handling via CSS media query
+      const exported = `<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>${safe(st.productName)}</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f8fafc;color:#1e293b}
+    header{background:linear-gradient(135deg,#0a2342,#1e3a8a);color:#fff;text-align:center;padding:60px 20px;border-bottom:6px solid #fbbf24}
+    header h1{font-size:2.4em;margin:0}
+    header p{margin-top:6px}
+    .hero{height:70vh;background-image:url('${escapeAttr(st.bgDesktop)}');background-size:cover;background-position:center top;display:flex;align-items:center;justify-content:center}
+    @media(max-width:768px){ .hero{background-image:url('${escapeAttr(st.bgMobile)}');background-attachment:scroll} }
+    .cta{background:linear-gradient(90deg,#fbbf24,#f59e0b);color:#072033;padding:15px 30px;border-radius:50px;text-decoration:none;font-weight:700}
+    .content{max-width:1100px;margin:32px auto;padding:0 20px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:16px}
+    .card{background:#fff;padding:18px;border-radius:12px;border:1px solid #eef5ff}
+    .testimonials{background:linear-gradient(135deg,#e0f2fe,#eff6ff);padding:40px;border-radius:12px;margin-top:26px}
+    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .review-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 8px 20px rgba(2,6,23,0.04)}
+    .avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #f2f2f2}
+    footer{background:#0a2342;color:#fff;padding:24px;text-align:center;border-top:4px solid #fbbf24;margin-top:28px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>${safe(st.productName)} 💪</h1>
+    <p>${safe(st.subtitle || '')}</p>
+  </header>
+  <div class="hero">
+    <a class="cta" href="${escapeAttr(st.buyLink || '#')}">🔥 I WANT MY ${safe(st.productName).toUpperCase()} NOW</a>
+  </div>
+  <div class="content">
+    <section>
+      <h2>🌿 Rediscover Your Natural Vitality</h2>
+      <p><strong style="color:#f59e0b">${safe(st.productName)}</strong> is a premium supplement specially developed to support male well-being and vitality.</p>
+    </section>
+
+    <section>
+      <h2>💥 Exclusive Benefits</h2>
+      <div class="cards">${benefitsHtml}</div>
+    </section>
+
+    <section>
+      <h2>🌱 Selected Natural Ingredients</h2>
+      <div class="cards">${ingredientsHtml}</div>
+    </section>
+
+    <div style="text-align:center;margin:32px 0">
+      <a class="cta" href="${escapeAttr(st.buyLink || '#')}">🔥 I WANT MY ${safe(st.productName).toUpperCase()} NOW</a>
+    </div>
+
+    <section class="testimonials">
+      <h2>What customers are saying</h2>
+      <div class="reviews-grid">${reviewsHtml}</div>
+    </section>
+  </div>
+
+  <footer>
+    <p>© ${new Date().getFullYear()} ${safe(st.productName)} — <a href="${escapeAttr(st.privacyUrl||'privacy.html')}" style="color:#dbeafe">Privacy Policy</a> | <a href="${escapeAttr(st.termsUrl||'terms.html')}" style="color:#dbeafe">Terms</a></p>
+  </footer>
+</body>
+</html>
+`;
+      return exported;
+    }
+
+  </script>
+</body>
+</html>
