@@ -147,6 +147,89 @@
     .review-card .meta{display:flex;gap:12px;align-items:center}
     .avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #f2f2f2}
     footer{background:var(--primary);color:#fff;padding:24px;text-align:center;border-top:4px solid var(--accent)}
+
+    /* ======== ESTILO PRÓS E CONTRAS ======== */
+    #pros-e-contras {
+      background: #fff;
+      padding: 40px 20px;
+      border-radius: 12px;
+      margin-top: 40px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    #pros-e-contras h2 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 30px;
+    }
+
+    .pros-cons-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .pros, .cons {
+      flex: 1;
+      min-width: 300px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+    }
+
+    .pros h3 {
+      color: #2e7d32;
+      margin-bottom: 15px;
+    }
+
+    .cons h3 {
+      color: #c62828;
+      margin-bottom: 15px;
+    }
+
+    #prosList li, #consList li {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #prosList li input, #consList li input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+    }
+
+    .add-btn {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border: none;
+      background: #0066ff;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .add-btn:hover {
+      background: #004fd6;
+    }
+
+    .remove-btn {
+      background: transparent;
+      border: none;
+      color: #e53935;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
     /* responsive editor collapse on small screens */
     @media (max-width:900px){
       .app{grid-template-columns:1fr}
@@ -190,6 +273,14 @@
         padding: 12px 24px;
         width: 90%;
         max-width: 300px;
+      }
+
+      .pros-cons-container {
+        flex-direction: column;
+      }
+      
+      .pros, .cons {
+        min-width: 100%;
       }
     }
   </style>
@@ -249,6 +340,21 @@
       <div class="row" style="margin-top:8px">
         <input id="newBenefit" type="text" placeholder="Adicionar benefício..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6eef8">
         <button class="btn btn-success" id="addBenefit">➕</button>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2>Prós e Contras</h2>
+      <div class="field">
+        <label>Prós (um por linha)</label>
+        <textarea id="prosText" rows="4" placeholder="Digite cada pró em uma linha separada...">Melhora a saúde da próstata
+Fácil de tomar
+Composto natural</textarea>
+      </div>
+      <div class="field">
+        <label>Contras (um por linha)</label>
+        <textarea id="consText" rows="4" placeholder="Digite cada contra em uma linha separada...">Disponível apenas online
+Resultados variam por pessoa</textarea>
       </div>
 
       <div class="section-divider"></div>
@@ -321,6 +427,21 @@
           <div class="cards" id="benefitsCards"></div>
         </section>
 
+        <!-- ====================== SEÇÃO PRÓS E CONTRAS ====================== -->
+        <section id="pros-e-contras" class="section">
+          <h2>Prós e Contras</h2>
+          <div class="pros-cons-container">
+            <div class="pros">
+              <h3>✅ Prós</h3>
+              <ul id="prosList"></ul>
+            </div>
+            <div class="cons">
+              <h3>❌ Contras</h3>
+              <ul id="consList"></ul>
+            </div>
+          </div>
+        </section>
+
         <section class="ingredients" style="margin-top:18px">
           <h2>🌱 Selected Natural Ingredients</h2>
           <div class="cards" id="ingredientsCards"></div>
@@ -369,6 +490,8 @@
         "✅ Enhances skin and inflammatory response",
         "✅ 100% natural formula"
       ],
+      pros: ["Melhora a saúde da próstata", "Fácil de tomar", "Composto natural"],
+      cons: ["Disponível apenas online", "Resultados variam por pessoa"],
       ingredients: [
         "Powerful Natural Blend: Proprietary formula with natural ingredients",
         "Blood Flow Support: Promotes healthy circulation",
@@ -407,12 +530,16 @@
     const bgDesktopInput = document.getElementById("bgDesktop");
     const bgMobileInput = document.getElementById("bgMobile");
     const youtubeVideoIdInput = document.getElementById("youtubeVideoId");
+    const prosTextInput = document.getElementById("prosText");
+    const consTextInput = document.getElementById("consText");
     const benefitsList = document.getElementById("benefitsList");
     const ingredientsList = document.getElementById("ingredientsList");
     const reviewsList = document.getElementById("reviewsList");
     const benefitsCards = document.getElementById("benefitsCards");
     const ingredientsCards = document.getElementById("ingredientsCards");
     const reviewsGrid = document.getElementById("reviewsGrid");
+    const prosList = document.getElementById("prosList");
+    const consList = document.getElementById("consList");
     const previewTitle = document.getElementById("previewTitle");
     const previewSubtitle = document.getElementById("previewSubtitle");
     const highlightName = document.getElementById("highlightName");
@@ -461,6 +588,8 @@
       bgDesktopInput.value = state.bgDesktop || DEFAULT.bgDesktop;
       bgMobileInput.value = state.bgMobile || DEFAULT.bgMobile;
       youtubeVideoIdInput.value = state.youtubeVideoId || DEFAULT.youtubeVideoId;
+      prosTextInput.value = (state.pros || DEFAULT.pros).join('\n');
+      consTextInput.value = (state.cons || DEFAULT.cons).join('\n');
       privacyUrlInput.value = state.privacyUrl || DEFAULT.privacyUrl;
       termsUrlInput.value = state.termsUrl || DEFAULT.termsUrl;
       
@@ -508,6 +637,58 @@
           const idx = +e.target.dataset.index;
           state.benefits.splice(idx,1);
           renderBenefits();
+        });
+      });
+    }
+
+    function renderProsCons() {
+      prosList.innerHTML = "";
+      consList.innerHTML = "";
+      
+      // Render pros
+      state.pros.forEach((pro, i) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <input type="text" value="${pro}" data-index="${i}" data-type="pro" />
+          <button class="remove-btn" data-index="${i}" data-type="pro">×</button>
+        `;
+        prosList.appendChild(li);
+      });
+
+      // Render cons
+      state.cons.forEach((con, i) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <input type="text" value="${con}" data-index="${i}" data-type="con" />
+          <button class="remove-btn" data-index="${i}" data-type="con">×</button>
+        `;
+        consList.appendChild(li);
+      });
+
+      // Add event listeners for removal
+      document.querySelectorAll(".remove-btn").forEach(btn => {
+        btn.addEventListener("click", e => {
+          const index = e.target.dataset.index;
+          const type = e.target.dataset.type;
+          if (type === "pro") {
+            state.pros.splice(index, 1);
+          } else {
+            state.cons.splice(index, 1);
+          }
+          renderProsCons();
+        });
+      });
+
+      // Add event listeners for editing
+      document.querySelectorAll("#prosList input, #consList input").forEach(input => {
+        input.addEventListener("input", e => {
+          const index = e.target.dataset.index;
+          const type = e.target.dataset.type;
+          if (type === "pro") {
+            state.pros[index] = e.target.value;
+          } else {
+            state.cons[index] = e.target.value;
+          }
         });
       });
     }
@@ -685,6 +866,7 @@
       privacyLink.href = state.privacyUrl || DEFAULT.privacyUrl;
       termsLink.href = state.termsUrl || DEFAULT.termsUrl;
       renderBenefits();
+      renderProsCons();
       renderIngredients();
       renderReviews();
       // persist automatically
@@ -703,6 +885,14 @@
     bgDesktopInput.addEventListener("input", e=>{ state.bgDesktop = e.target.value; renderAll(); });
     bgMobileInput.addEventListener("input", e=>{ state.bgMobile = e.target.value; renderAll(); });
     youtubeVideoIdInput.addEventListener("input", e=>{ state.youtubeVideoId = e.target.value; renderAll(); });
+    prosTextInput.addEventListener("input", e=>{ 
+      state.pros = e.target.value.split('\n').filter(line => line.trim() !== ''); 
+      renderProsCons();
+    });
+    consTextInput.addEventListener("input", e=>{ 
+      state.cons = e.target.value.split('\n').filter(line => line.trim() !== ''); 
+      renderProsCons();
+    });
     privacyUrlInput.addEventListener("input", e=>{ state.privacyUrl = e.target.value; renderAll(); });
     termsUrlInput.addEventListener("input", e=>{ state.termsUrl = e.target.value; renderAll(); });
 
@@ -826,6 +1016,25 @@
         </article>`;
       }).join("\n");
 
+      // Generate Pros and Cons HTML
+      const prosHtml = (st.pros || []).map(pro => `<li>${escapeHtml(pro)}</li>`).join("");
+      const consHtml = (st.cons || []).map(con => `<li>${escapeHtml(con)}</li>`).join("");
+      const prosConsHtml = `
+        <section id="pros-e-contras">
+          <h2>Pros and Cons</h2>
+          <div class="pros-cons-container">
+            <div class="pros">
+              <h3>✅ Pros</h3>
+              <ul>${prosHtml}</ul>
+            </div>
+            <div class="cons">
+              <h3>❌ Cons</h3>
+              <ul>${consHtml}</ul>
+            </div>
+          </div>
+        </section>
+      `;
+
       const backgroundType = st.backgroundType || DEFAULT.backgroundType;
       let heroBackgroundHtml = '';
       
@@ -892,6 +1101,74 @@
     .avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #f2f2f2}
     footer{background:var(--primary);color:#fff;padding:24px;text-align:center;border-top:4px solid var(--accent);margin-top:28px}
     footer a{color:#dbeafe;text-decoration:underline}
+
+    /* ======== ESTILO PRÓS E CONTRAS ======== */
+    #pros-e-contras {
+      background: #fff;
+      padding: 40px 20px;
+      border-radius: 12px;
+      margin-top: 40px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    #pros-e-contras h2 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 30px;
+    }
+
+    .pros-cons-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .pros, .cons {
+      flex: 1;
+      min-width: 300px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+    }
+
+    .pros h3 {
+      color: #2e7d32;
+      margin-bottom: 15px;
+    }
+
+    .cons h3 {
+      color: #c62828;
+      margin-bottom: 15px;
+    }
+
+    #prosList li, #consList li {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #prosList li input, #consList li input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+    }
+
+    .remove-btn {
+      background: transparent;
+      border: none;
+      color: #e53935;
+      font-size: 18px;
+      cursor: pointer;
+    }
     
     /* Mobile styles */
     @media(max-width:768px){ 
@@ -931,6 +1208,14 @@
         width: 90%;
         max-width: 300px;
       }
+
+      .pros-cons-container {
+        flex-direction: column;
+      }
+      
+      .pros, .cons {
+        min-width: 100%;
+      }
     }
   </style>
   ${backgroundType === 'image' ? heroBackgroundHtml : ''}
@@ -957,6 +1242,8 @@
       <h2>💥 Exclusive Benefits</h2>
       <div class="cards">${benefitsHtml}</div>
     </section>
+
+    ${prosConsHtml}
 
     <section>
       <h2>🌱 Selected Natural Ingredients</h2>
