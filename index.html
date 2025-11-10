@@ -16,14 +16,84 @@
       --success:#10b981;
       --error:#ef4444;
     }
+
     *{box-sizing:border-box}
-    body{font-family:'Poppins',sans-serif;margin:0;background:var(--bg);color:#1e293b}
+    body{
+      font-family:'Poppins',sans-serif;
+      margin:0;
+      background:var(--bg);
+      color:#1e293b;
+    }
+
+    /* === HERO PRINCIPAL COM VÍDEO CENTRALIZADO === */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 0 15px;
+      box-sizing: border-box;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    }
+
+    .video-container {
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      margin-bottom: 25px;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(2,6,23,0.08);
+    }
+
+    /* === BOTÃO === */
+    .cta {
+      background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+      color: #072033;
+      font-weight: 700;
+      padding: 18px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 8px 24px rgba(251,191,36,0.25);
+      transform: translateY(0);
+      transition: all 0.3s;
+      font-size: 18px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(251,191,36,0.35);
+    }
+
+    /* === AJUSTE RESPONSIVO === */
+    @media (max-width: 600px) {
+      .video-container {
+        max-width: 100%;
+      }
+      .cta {
+        width: 80%;
+        font-size: 16px;
+      }
+    }
+
+    /* === OUTRAS PARTES DO EDITOR === */
     .app {
       display:grid;
       grid-template-columns:360px 1fr;
       min-height:100vh;
     }
-    /* Sidebar editor */
+
     .editor {
       background:#fff;
       border-right:1px solid #e6eef8;
@@ -31,6 +101,7 @@
       overflow:auto;
       position:relative;
     }
+
     .editor h2{font-size:18px;margin:8px 0 12px}
     .field{margin-bottom:12px}
     .field label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
@@ -38,11 +109,13 @@
       width:100%; padding:10px;border-radius:8px;border:1px solid #e2e8f0;font-size:14px;
       transition:border-color 0.2s;
     }
+
     .field input:focus, .field textarea:focus, .field select:focus {
       outline:none;
       border-color:var(--accent);
       box-shadow:0 0 0 3px rgba(245,158,11,0.1);
     }
+
     .small{font-size:12px;color:var(--muted)}
     .btn {display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;font-weight:600;transition:all 0.2s}
     .btn-save{background:var(--primary);color:#fff;margin-right:8px}
@@ -65,13 +138,11 @@
     .status-message.show{opacity:1;transform:translateY(0)}
     .status-success{background:var(--success)}
     .status-error{background:var(--error)}
-    /* Preview area */
     .preview {
       overflow:auto;
       min-height:100vh;
       background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
     }
-    /* Use the user's design adapted from provided code */
     header.preview-header{
       background:linear-gradient(135deg,var(--primary),#1e3a8a);
       color:#fff;
@@ -81,61 +152,6 @@
     }
     header.preview-header h1{font-size:32px;margin:4px 0}
     header.preview-header p{margin:6px 0;font-size:15px}
-    .hero {
-      height:60vh;
-      position:relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background-size: cover;
-      background-position: center;
-    }
-    .video-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-    .video-container iframe {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(10, 35, 66, 0.3);
-      z-index: 1;
-    }
-    .hero > * {
-      position: relative;
-      z-index: 2;
-    }
-    .cta-large{
-      background:linear-gradient(90deg,var(--accent-dark),var(--accent));
-      color:#072033;
-      font-weight:700;
-      padding:14px 28px;
-      border-radius:50px;
-      text-decoration:none;
-      display:inline-block;
-      box-shadow:0 8px 24px rgba(251,191,36,0.25);
-      transform:translateY(0);
-      transition:all 0.3s;
-      font-size: 18px;
-      text-align: center;
-      line-height: 1.4;
-    }
-    .cta-large:hover{
-      transform:translateY(-3px);
-      box-shadow:0 12px 28px rgba(251,191,36,0.35);
-    }
     .content{max-width:1100px;margin:32px auto;padding:0 20px}
     .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
     .card{background:var(--card-bg);padding:18px;border-radius:12px;border:1px solid #eef5ff;box-shadow:0 6px 18px rgba(2,6,23,0.03);transition:transform 0.2s}
@@ -230,6 +246,26 @@
       cursor: pointer;
     }
 
+    /* ======== ESTILO PARA IMAGEM DO PRODUTO ======== */
+    .product-image-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 40px auto;
+      text-align: center;
+    }
+
+    .product-image {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(2,6,23,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .product-image:hover {
+      transform: scale(1.02);
+    }
+
     /* responsive editor collapse on small screens */
     @media (max-width:900px){
       .app{grid-template-columns:1fr}
@@ -238,58 +274,41 @@
       .toggle-editor{position:fixed;right:16px;bottom:16px;z-index:50;padding:12px 14px;border-radius:12px;background:var(--accent);color:#072033;border:none;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
     }
     @media (max-width: 768px) {
-      .hero {
-        height: auto;
-        min-height: 80vh;
-        flex-direction: column;
-        padding: 20px 0;
-      }
-      
-      .video-container {
-        position: relative;
-        height: 50vh;
-        width: 100%;
-        flex-shrink: 0;
-      }
-      
-      .hero::before {
-        display: none;
-      }
-      
-      .video-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(10, 35, 66, 0.3);
-        z-index: 1;
-      }
-      
-      .cta-large {
-        margin-top: 20px;
-        font-size: 16px;
-        padding: 12px 24px;
-        width: 90%;
-        max-width: 300px;
-      }
-
       .pros-cons-container {
         flex-direction: column;
       }
-      
+
       .pros, .cons {
         min-width: 100%;
+      }
+
+      .product-image-container {
+        max-width: 100%;
+        margin: 30px auto;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="app">
     <!-- EDITOR SIDEBAR -->
     <aside class="editor" id="editor">
       <h2>Editor do Presell</h2>
+
+      <!-- NOVA SEÇÃO: IDIOMA -->
+      <div class="field">
+        <label>🌐 Idioma da Presell</label>
+        <select id="language">
+          <option value="en">English</option>
+          <option value="pt">Português</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+        </select>
+        <div class="small">Escolha o idioma para todos os textos fixos da página.</div>
+      </div>
+
+      <div class="section-divider"></div>
 
       <div class="field">
         <label>Nome do produto</label>
@@ -305,6 +324,18 @@
       <div class="field">
         <label>Link do botão de compra (href)</label>
         <input type="url" id="buyLink" placeholder="https://seusite.com/checkout" value="#buy">
+      </div>
+
+      <!-- controles apenas para cores do botão CTA -->
+      <div class="section-divider"></div>
+      <h2>Cores do botão CTA</h2>
+      <div class="field">
+        <label>🎨 Cor principal</label>
+        <input type="color" id="btnColor" value="#f59e0b">
+      </div>
+      <div class="field">
+        <label>🌈 Cor de hover (gradiente)</label>
+        <input type="color" id="btnColorHover" value="#fbbf24">
       </div>
 
       <div class="field">
@@ -340,6 +371,15 @@
       <div class="row" style="margin-top:8px">
         <input id="newBenefit" type="text" placeholder="Adicionar benefício..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6eef8">
         <button class="btn btn-success" id="addBenefit">➕</button>
+      </div>
+
+      <!-- SEÇÃO: IMAGEM DO PRODUTO -->
+      <div class="section-divider"></div>
+      <h2>Imagem do Produto</h2>
+      <div class="field">
+        <label>URL da Imagem do Produto</label>
+        <input type="url" id="productImageUrl" placeholder="https://exemplo.com/imagem-do-produto.jpg" value="">
+        <div class="small">Adicione a URL da imagem do produto que será exibida abaixo dos benefícios.</div>
       </div>
 
       <div class="section-divider"></div>
@@ -410,54 +450,61 @@ Resultados variam por pessoa</textarea>
       <!-- hero with background and button -->
       <div class="hero" id="hero">
         <div class="video-container" id="videoContainer"></div>
-        <a id="ctaBtn" class="cta-large" href="#buy">
-          <span style="display:block; font-size: 14px; margin-bottom: 5px;">I WANT MY</span>
-          <span style="display:block; font-size: 22px; font-weight: 800;">MAX BOOST NOW</span>
+        <a id="ctaBtn" class="cta" href="#buy">
+          <span style="display:block; font-size: 14px; margin-bottom: 5px;" id="ctaLine1">I WANT MY</span>
+          <span style="display:block; font-size: 22px; font-weight: 800;" id="ctaLine2">MAX BOOST NOW</span>
         </a>
       </div>
 
       <div class="content">
         <section>
-          <h2>🌿 Rediscover Your Natural Vitality</h2>
-          <p><span id="highlightName" style="font-weight:700;color:var(--accent)">Max Boost</span> is an all-natural formula designed to support her and enhance sexual drive. Made in the USA from a proprietary powerful natural ingredients, it promotes healthy blood flow supports overall vitality, improves energy, sleep quality, skin and inflammatory response.</p>
+          <h2 id="section1Title">🌿 Rediscover Your Natural Vitality</h2>
+          <p id="section1Text"><span id="highlightName" style="font-weight:700;color:var(--accent)">Max Boost</span> is an all-natural formula designed to support her and enhance sexual drive. Made in the USA from a proprietary powerful natural ingredients, it promotes healthy blood flow supports overall vitality, improves energy, sleep quality, skin and inflammatory response.</p>
         </section>
 
         <section>
-          <h2>💥 Exclusive Benefits</h2>
+          <h2 id="benefitsTitle">💥 Exclusive Benefits</h2>
           <div class="cards" id="benefitsCards"></div>
+        </section>
+
+        <!-- SEÇÃO: IMAGEM DO PRODUTO NO PREVIEW -->
+        <section id="productImageSection" style="display: none;">
+          <div class="product-image-container">
+            <img id="productImage" src="" alt="Imagem do Produto" class="product-image">
+          </div>
         </section>
 
         <!-- ====================== SEÇÃO PROS AND CONS ====================== -->
         <section id="pros-e-contras" class="section">
-          <h2>Pros and Cons</h2>
+          <h2 id="prosConsTitle">Pros and Cons</h2>
           <div class="pros-cons-container">
             <div class="pros">
-              <h3>✅ Pros</h3>
+              <h3 id="prosTitle">✅ Pros</h3>
               <ul id="prosList"></ul>
             </div>
             <div class="cons">
-              <h3>❌ Cons</h3>
+              <h3 id="consTitle">❌ Cons</h3>
               <ul id="consList"></ul>
             </div>
           </div>
         </section>
 
         <section class="ingredients" style="margin-top:18px">
-          <h2>🌱 Selected Natural Ingredients</h2>
+          <h2 id="ingredientsTitle">🌱 Selected Natural Ingredients</h2>
           <div class="cards" id="ingredientsCards"></div>
         </section>
 
-        <div class="cta" style="text-align:center;margin:36px 0">
-          <a id="ctaBottom" class="cta-large" href="#buy">
-            <span style="display:block; font-size: 14px; margin-bottom: 5px;">I WANT MY</span>
-            <span style="display:block; font-size: 22px; font-weight: 800;">MAX BOOST NOW</span>
+        <div style="text-align:center;margin:36px 0">
+          <a id="ctaBottom" class="cta" href="#buy">
+            <span style="display:block; font-size: 14px; margin-bottom: 5px;" id="ctaBottomLine1">I WANT MY</span>
+            <span style="display:block; font-size: 22px; font-weight: 800;" id="ctaBottomLine2">MAX BOOST NOW</span>
           </a>
         </div>
 
         <section class="testimonials">
-          <h2 style="margin-bottom:16px">What customers are saying</h2>
+          <h2 style="margin-bottom:16px" id="testimonialsTitle">What customers are saying</h2>
           <div class="reviews-grid" id="reviewsGrid"></div>
-          <p style="font-size:12px;color:var(--muted);margin-top:8px">*Results may vary from person to person.</p>
+          <p style="font-size:12px;color:var(--muted);margin-top:8px" id="testimonialsNote">*Results may vary from person to person.</p>
         </section>
 
         <footer style="margin-top:40px">
@@ -504,7 +551,78 @@ Resultados variam por pessoa</textarea>
         {name:"David P.", text:"My life had changed. My energy returned. I felt younger and more vibrant than ever.", rating:5, date:"2025-05-27", avatar:"https://i.pravatar.cc/150?img=5"}
       ],
       privacyUrl: "privacy/privacy.html",
-      termsUrl: "terms.html"
+      termsUrl: "terms.html",
+      // defaults for CTA colors
+      btnColor: "#f59e0b",
+      btnColorHover: "#fbbf24",
+      // Novo campo para imagem do produto
+      productImageUrl: "",
+      // Novo campo para idioma
+      language: "en"
+    };
+
+    // Sistema de tradução
+    const TRANSLATIONS = {
+      en: {
+        ctaLine1: "I WANT MY",
+        ctaLine2: "MAX BOOST NOW",
+        section1Title: "🌿 Rediscover Your Natural Vitality",
+        section1Text: "is an all-natural formula designed to support her and enhance sexual drive. Made in the USA from a proprietary powerful natural ingredients, it promotes healthy blood flow supports overall vitality, improves energy, sleep quality, skin and inflammatory response.",
+        benefitsTitle: "💥 Exclusive Benefits",
+        prosConsTitle: "Pros and Cons",
+        prosTitle: "✅ Pros",
+        consTitle: "❌ Cons",
+        ingredientsTitle: "🌱 Selected Natural Ingredients",
+        testimonialsTitle: "What customers are saying",
+        testimonialsNote: "*Results may vary from person to person.",
+        privacyText: "Privacy Policy",
+        termsText: "Terms"
+      },
+      pt: {
+        ctaLine1: "EU QUERO MEU",
+        ctaLine2: "MAX BOOST AGORA",
+        section1Title: "🌿 Redescubra Sua Vitalidade Natural",
+        section1Text: "é uma fórmula totalmente natural projetada para apoiar e melhorar o desejo sexual. Feito nos EUA com ingredientes naturais poderosos proprietários, promove fluxo sanguíneo saudável, apoia a vitalidade geral, melhora energia, qualidade do sono, pele e resposta inflamatória.",
+        benefitsTitle: "💥 Benefícios Exclusivos",
+        prosConsTitle: "Prós e Contras",
+        prosTitle: "✅ Prós",
+        consTitle: "❌ Contras",
+        ingredientsTitle: "🌱 Ingredientes Naturais Selecionados",
+        testimonialsTitle: "O que os clientes estão dizendo",
+        testimonialsNote: "*Resultados podem variar de pessoa para pessoa.",
+        privacyText: "Política de Privacidade",
+        termsText: "Termos de Uso"
+      },
+      es: {
+        ctaLine1: "YO QUIERO MI",
+        ctaLine2: "MAX BOOST AHORA",
+        section1Title: "🌿 Redescubre Tu Vitalidad Natural",
+        section1Text: "es una fórmula totalmente natural diseñada para apoyar y mejorar el deseo sexual. Hecho en EE. UU. con ingredientes naturales poderosos patentados, promueve un flujo sanguíneo saludable, apoya la vitalidad general, mejora la energía, la calidad del sueño, la piel y la respuesta inflamatoria.",
+        benefitsTitle: "💥 Beneficios Exclusivos",
+        prosConsTitle: "Pros y Contras",
+        prosTitle: "✅ Pros",
+        consTitle: "❌ Contras",
+        ingredientsTitle: "🌱 Ingredientes Naturales Seleccionados",
+        testimonialsTitle: "Lo que dicen los clientes",
+        testimonialsNote: "*Los resultados pueden variar de persona a persona.",
+        privacyText: "Política de Privacidad",
+        termsText: "Términos y Condiciones"
+      },
+      fr: {
+        ctaLine1: "JE VEUX MON",
+        ctaLine2: "MAX BOOST MAINTENANT",
+        section1Title: "🌿 Redécouvrez Votre Vitalité Naturelle",
+        section1Text: "est une formule entièrement naturelle conçue pour soutenir et améliorer le désir sexuel. Fabriqué aux États-Unis à partir d'ingrédients naturels puissants brevetés, il favorise une circulation sanguine saine, soutient la vitalité globale, améliore l'énergie, la qualité du sommeil, la peau et la réponse inflammatoire.",
+        benefitsTitle: "💥 Avantages Exclusifs",
+        prosConsTitle: "Avantages et Inconvénients",
+        prosTitle: "✅ Avantages",
+        consTitle: "❌ Inconvénients",
+        ingredientsTitle: "🌱 Ingrédients Naturels Sélectionnés",
+        testimonialsTitle: "Ce que disent les clients",
+        testimonialsNote: "*Les résultats peuvent varier d'une personne à l'autre.",
+        privacyText: "Politique de Confidentialité",
+        termsText: "Conditions d'Utilisation"
+      }
     };
 
     // load saved or default
@@ -564,12 +682,39 @@ Resultados variam por pessoa</textarea>
     const termsUrlInput = document.getElementById("termsUrl");
     const statusMessage = document.getElementById("statusMessage");
 
+    // New: btn color inputs
+    const btnColorInput = document.getElementById("btnColor");
+    const btnColorHoverInput = document.getElementById("btnColorHover");
+
+    // Input para imagem do produto
+    const productImageUrlInput = document.getElementById("productImageUrl");
+    const productImageSection = document.getElementById("productImageSection");
+    const productImage = document.getElementById("productImage");
+
+    // Novo: Input para idioma
+    const languageInput = document.getElementById("language");
+
+    // Elementos de texto para tradução
+    const ctaLine1 = document.getElementById("ctaLine1");
+    const ctaLine2 = document.getElementById("ctaLine2");
+    const ctaBottomLine1 = document.getElementById("ctaBottomLine1");
+    const ctaBottomLine2 = document.getElementById("ctaBottomLine2");
+    const section1Title = document.getElementById("section1Title");
+    const section1Text = document.getElementById("section1Text");
+    const benefitsTitle = document.getElementById("benefitsTitle");
+    const prosConsTitle = document.getElementById("prosConsTitle");
+    const prosTitle = document.getElementById("prosTitle");
+    const consTitle = document.getElementById("consTitle");
+    const ingredientsTitle = document.getElementById("ingredientsTitle");
+    const testimonialsTitle = document.getElementById("testimonialsTitle");
+    const testimonialsNote = document.getElementById("testimonialsNote");
+
     // Toggle background type fields
     function toggleBackgroundFields() {
       const backgroundType = backgroundTypeInput.value;
       const imageFields = document.querySelectorAll('.image-background');
       const videoFields = document.querySelectorAll('.video-background');
-      
+
       if (backgroundType === 'image') {
         imageFields.forEach(field => field.style.display = 'block');
         videoFields.forEach(field => field.style.display = 'none');
@@ -577,6 +722,30 @@ Resultados variam por pessoa</textarea>
         imageFields.forEach(field => field.style.display = 'none');
         videoFields.forEach(field => field.style.display = 'block');
       }
+    }
+
+    // Função para aplicar traduções
+    function applyTranslations(lang) {
+      const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      
+      // Aplicar traduções aos elementos
+      ctaLine1.textContent = t.ctaLine1;
+      ctaLine2.textContent = t.ctaLine2.replace("MAX BOOST", state.productName.toUpperCase());
+      ctaBottomLine1.textContent = t.ctaLine1;
+      ctaBottomLine2.textContent = t.ctaLine2.replace("MAX BOOST", state.productName.toUpperCase());
+      section1Title.textContent = t.section1Title;
+      section1Text.innerHTML = `<span id="highlightName" style="font-weight:700;color:var(--accent)">${state.productName}</span> ${t.section1Text}`;
+      benefitsTitle.textContent = t.benefitsTitle;
+      prosConsTitle.textContent = t.prosConsTitle;
+      prosTitle.textContent = t.prosTitle;
+      consTitle.textContent = t.consTitle;
+      ingredientsTitle.textContent = t.ingredientsTitle;
+      testimonialsTitle.textContent = t.testimonialsTitle;
+      testimonialsNote.textContent = t.testimonialsNote;
+      
+      // Atualizar links de footer
+      privacyLink.textContent = t.privacyText;
+      termsLink.textContent = t.termsText;
     }
 
     /* init inputs */
@@ -592,14 +761,20 @@ Resultados variam por pessoa</textarea>
       consTextInput.value = (state.cons || DEFAULT.cons).join('\n');
       privacyUrlInput.value = state.privacyUrl || DEFAULT.privacyUrl;
       termsUrlInput.value = state.termsUrl || DEFAULT.termsUrl;
-      
+      productImageUrlInput.value = state.productImageUrl || DEFAULT.productImageUrl;
+      languageInput.value = state.language || DEFAULT.language;
+
+      // set color inputs from state
+      if (state.btnColor) btnColorInput.value = state.btnColor;
+      if (state.btnColorHover) btnColorHoverInput.value = state.btnColorHover;
+
       toggleBackgroundFields();
     }
 
     function showStatus(message, isSuccess = true) {
       statusMessage.textContent = message;
       statusMessage.className = `status-message ${isSuccess ? 'status-success' : 'status-error'} show`;
-      
+
       setTimeout(() => {
         statusMessage.classList.remove('show');
       }, 3000);
@@ -641,10 +816,27 @@ Resultados variam por pessoa</textarea>
       });
     }
 
+    function renderProductImage() {
+      const imageUrl = state.productImageUrl;
+      
+      if (imageUrl && imageUrl.trim() !== '') {
+        productImage.src = imageUrl;
+        productImageSection.style.display = 'block';
+        
+        // Adicionar fallback para erro de carregamento
+        productImage.onerror = function() {
+          productImageSection.style.display = 'none';
+          console.warn('Erro ao carregar imagem do produto:', imageUrl);
+        };
+      } else {
+        productImageSection.style.display = 'none';
+      }
+    }
+
     function renderProsCons() {
       prosList.innerHTML = "";
       consList.innerHTML = "";
-      
+
       // Render pros
       state.pros.forEach((pro, i) => {
         const li = document.createElement("li");
@@ -793,12 +985,12 @@ Resultados variam por pessoa</textarea>
 
     function updateHeroBackground() {
       const backgroundType = state.backgroundType || DEFAULT.backgroundType;
-      
+
       if (backgroundType === 'video') {
         // Video background
         const videoId = state.youtubeVideoId || DEFAULT.youtubeVideoId;
         videoContainer.innerHTML = '';
-        
+
         if (videoId) {
           const iframe = document.createElement('iframe');
           iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1&showinfo=0&rel=0&modestbranding=1&disablekb=1&playsinline=1`;
@@ -807,20 +999,20 @@ Resultados variam por pessoa</textarea>
           iframe.frameBorder = '0';
           videoContainer.appendChild(iframe);
         }
-        
+
         // Reset image background
         hero.style.backgroundImage = 'none';
       } else {
         // Image background
         const desktopUrl = state.bgDesktop || DEFAULT.bgDesktop;
         const mobileUrl = state.bgMobile || DEFAULT.bgMobile;
-        
+
         // Set desktop background as default
         hero.style.backgroundImage = `url('${desktopUrl}')`;
-        
+
         // Clear video container
         videoContainer.innerHTML = '';
-        
+
         // Create a style element for mobile background
         let mobileStyle = document.getElementById('mobileBackgroundStyle');
         if (!mobileStyle) {
@@ -828,7 +1020,7 @@ Resultados variam por pessoa</textarea>
           mobileStyle.id = 'mobileBackgroundStyle';
           document.head.appendChild(mobileStyle);
         }
-        
+
         // Update mobile background media query
         mobileStyle.textContent = `
           @media (max-width: 768px) {
@@ -840,27 +1032,42 @@ Resultados variam por pessoa</textarea>
       }
     }
 
+    function applyCtaColors() {
+      // apply saved colors to CSS variables
+      if (state.btnColor) document.documentElement.style.setProperty('--accent', state.btnColor);
+      if (state.btnColorHover) document.documentElement.style.setProperty('--accent-dark', state.btnColorHover);
+    }
+
     function renderAll(){
       previewTitle.textContent = state.productName;
       previewSubtitle.textContent = state.subtitle;
       highlightName.textContent = state.productName;
       ctaBtn.href = state.buyLink;
       ctaBottom.href = state.buyLink;
-      
+
+      // Apply translations
+      applyTranslations(state.language);
+
       // Update CTA button text with two lines
       ctaBtn.innerHTML = `
-        <span style="display:block; font-size: 14px; margin-bottom: 5px;">I WANT MY</span>
+        <span style="display:block; font-size: 14px; margin-bottom: 5px;">${ctaLine1.textContent}</span>
         <span style="display:block; font-size: 22px; font-weight: 800;">${state.productName.toUpperCase()} NOW</span>
       `;
-      
+
       ctaBottom.innerHTML = `
-        <span style="display:block; font-size: 14px; margin-bottom: 5px;">I WANT MY</span>
+        <span style="display:block; font-size: 14px; margin-bottom: 5px;">${ctaBottomLine1.textContent}</span>
         <span style="display:block; font-size: 22px; font-weight: 800;">${state.productName.toUpperCase()} NOW</span>
       `;
-      
+
+      // Apply CTA colors
+      applyCtaColors();
+
       // Update hero background
       updateHeroBackground();
-      
+
+      // Render product image
+      renderProductImage();
+
       footerYear.textContent = new Date().getFullYear();
       footerProduct.textContent = state.productName;
       privacyLink.href = state.privacyUrl || DEFAULT.privacyUrl;
@@ -877,24 +1084,36 @@ Resultados variam por pessoa</textarea>
     productNameInput.addEventListener("input", e=>{ state.productName = e.target.value || DEFAULT.productName; renderAll(); });
     subtitleInput.addEventListener("input", e=>{ state.subtitle = e.target.value; renderAll(); });
     buyLinkInput.addEventListener("input", e=>{ state.buyLink = e.target.value; renderAll(); });
-    backgroundTypeInput.addEventListener("change", e=>{ 
-      state.backgroundType = e.target.value; 
+    backgroundTypeInput.addEventListener("change", e=>{
+      state.backgroundType = e.target.value;
       toggleBackgroundFields();
-      renderAll(); 
+      renderAll();
     });
     bgDesktopInput.addEventListener("input", e=>{ state.bgDesktop = e.target.value; renderAll(); });
     bgMobileInput.addEventListener("input", e=>{ state.bgMobile = e.target.value; renderAll(); });
     youtubeVideoIdInput.addEventListener("input", e=>{ state.youtubeVideoId = e.target.value; renderAll(); });
-    prosTextInput.addEventListener("input", e=>{ 
-      state.pros = e.target.value.split('\n').filter(line => line.trim() !== ''); 
+    prosTextInput.addEventListener("input", e=>{
+      state.pros = e.target.value.split('\n').filter(line => line.trim() !== '');
       renderProsCons();
     });
-    consTextInput.addEventListener("input", e=>{ 
-      state.cons = e.target.value.split('\n').filter(line => line.trim() !== ''); 
+    consTextInput.addEventListener("input", e=>{
+      state.cons = e.target.value.split('\n').filter(line => line.trim() !== '');
       renderProsCons();
     });
     privacyUrlInput.addEventListener("input", e=>{ state.privacyUrl = e.target.value; renderAll(); });
     termsUrlInput.addEventListener("input", e=>{ state.termsUrl = e.target.value; renderAll(); });
+    
+    // Event listener para a URL da imagem do produto
+    productImageUrlInput.addEventListener("input", e=>{ 
+      state.productImageUrl = e.target.value; 
+      renderAll(); 
+    });
+
+    // Novo: Event listener para o idioma
+    languageInput.addEventListener("change", e=>{ 
+      state.language = e.target.value; 
+      renderAll(); 
+    });
 
     addBenefitBtn.addEventListener("click", ()=>{
       const v = newBenefitInput.value.trim();
@@ -922,8 +1141,8 @@ Resultados variam por pessoa</textarea>
       showStatus("Review adicionado com sucesso!");
     });
 
-    saveBtn.addEventListener("click", ()=>{ 
-      saveState(state); 
+    saveBtn.addEventListener("click", ()=>{
+      saveState(state);
       showStatus("Alterações salvas com sucesso!");
     });
 
@@ -972,18 +1191,22 @@ Resultados variam por pessoa</textarea>
 
     /* initial render */
     populateEditorFromState();
+
+    // Apply CTA colors to document now (in case state has saved values)
+    applyCtaColors();
+
     renderAll();
 
     /* enable mobile editor toggle */
     const editor = document.getElementById("editor");
     const toggle = document.getElementById("toggleEditor");
     function checkSmall(){
-      if(window.innerWidth<=900){ 
-        toggle.style.display="inline-block"; 
-        editor.classList.remove('open'); 
-      } else { 
-        toggle.style.display="none"; 
-        editor.classList.remove('open'); 
+      if(window.innerWidth<=900){
+        toggle.style.display="inline-block";
+        editor.classList.remove('open');
+      } else {
+        toggle.style.display="none";
+        editor.classList.remove('open');
       }
     }
     checkSmall();
@@ -995,6 +1218,9 @@ Resultados variam por pessoa</textarea>
 
     /* ---------- Export generator: produce a standalone presell HTML ---------- */
     function generateExportHtml(st){
+      // Obter traduções para o idioma selecionado
+      const t = TRANSLATIONS[st.language] || TRANSLATIONS.en;
+      
       // simple standalone HTML using inlined styles and content
       const safe = (s)=> escapeHtml(s||"");
       const benefitsHtml = (st.benefits || []).map(b=>`<div class="card">${escapeHtml(b)}</div>`).join("\n");
@@ -1019,16 +1245,29 @@ Resultados variam por pessoa</textarea>
       // Generate Pros and Cons HTML
       const prosHtml = (st.pros || []).map(pro => `<li>${escapeHtml(pro)}</li>`).join("");
       const consHtml = (st.cons || []).map(con => `<li>${escapeHtml(con)}</li>`).join("");
+      
+      // Generate Product Image HTML
+      let productImageHtml = '';
+      if (st.productImageUrl && st.productImageUrl.trim() !== '') {
+        productImageHtml = `
+        <section>
+          <div class="product-image-container">
+            <img src="${escapeAttr(st.productImageUrl)}" alt="${safe(st.productName)}" class="product-image">
+          </div>
+        </section>
+        `;
+      }
+
       const prosConsHtml = `
         <section id="pros-e-contras">
-          <h2>Pros and Cons</h2>
+          <h2>${t.prosConsTitle}</h2>
           <div class="pros-cons-container">
             <div class="pros">
-              <h3>✅ Pros</h3>
+              <h3>${t.prosTitle}</h3>
               <ul>${prosHtml}</ul>
             </div>
             <div class="cons">
-              <h3>❌ Cons</h3>
+              <h3>${t.consTitle}</h3>
               <ul>${consHtml}</ul>
             </div>
           </div>
@@ -1037,7 +1276,7 @@ Resultados variam por pessoa</textarea>
 
       const backgroundType = st.backgroundType || DEFAULT.backgroundType;
       let heroBackgroundHtml = '';
-      
+
       if (backgroundType === 'video') {
         const videoId = st.youtubeVideoId || DEFAULT.youtubeVideoId;
         heroBackgroundHtml = `
@@ -1061,10 +1300,10 @@ Resultados variam por pessoa</textarea>
           </style>
         `;
       }
-      
+
       // exported HTML: keep it simple and include the background
       const exported = `<!doctype html>
-<html lang="pt-BR">
+<html lang="${st.language}">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -1072,8 +1311,8 @@ Resultados variam por pessoa</textarea>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --accent: #f59e0b;
-      --accent-dark: #fbbf24;
+      --accent: ${st.btnColor || '#f59e0b'};
+      --accent-dark: ${st.btnColorHover || '#fbbf24'};
       --primary: #0a2342;
       --muted: #7a7a7a;
       --card-bg: #fff;
@@ -1083,11 +1322,9 @@ Resultados variam por pessoa</textarea>
     header{background:linear-gradient(135deg,var(--primary),#1e3a8a);color:#fff;text-align:center;padding:60px 20px;border-bottom:6px solid var(--accent-dark)}
     header h1{font-size:2.4em;margin:0}
     header p{margin-top:6px}
-    .hero{height:70vh;position:relative;display:flex;align-items:center;justify-content:center;background-size:cover;background-position:center;overflow:hidden}
-    .video-container{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
-    .video-container iframe{width:100%;height:100%;object-fit:cover}
-    .hero::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(10,35,66,0.3);z-index:1}
-    .hero > *{position:relative;z-index:2}
+    .hero{min-height:70vh;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 15px;box-sizing:border-box;background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%)}
+    .video-container{width:100%;max-width:800px;aspect-ratio:16/9;margin-bottom:25px}
+    .video-container iframe{width:100%;height:100%;border:none;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(2,6,23,0.08)}
     .cta{background:linear-gradient(90deg,var(--accent-dark),var(--accent));color:#072033;padding:15px 30px;border-radius:50px;text-decoration:none;font-weight:700;display:inline-block;box-shadow:0 8px 24px rgba(251,191,36,0.25);transition:all 0.3s;font-size:18px;text-align:center;line-height:1.4}
     .cta:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(251,191,36,0.35)}
     .content{max-width:1100px;margin:32px auto;padding:0 20px}
@@ -1101,122 +1338,18 @@ Resultados variam por pessoa</textarea>
     .avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #f2f2f2}
     footer{background:var(--primary);color:#fff;padding:24px;text-align:center;border-top:4px solid var(--accent);margin-top:28px}
     footer a{color:#dbeafe;text-decoration:underline}
-
-    /* ======== ESTILO PROS AND CONS ======== */
-    #pros-e-contras {
-      background: #fff;
-      padding: 40px 20px;
-      border-radius: 12px;
-      margin-top: 40px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-
-    #pros-e-contras h2 {
-      text-align: center;
-      color: #222;
-      margin-bottom: 30px;
-    }
-
-    .pros-cons-container {
-      display: flex;
-      justify-content: space-between;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-
-    .pros, .cons {
-      flex: 1;
-      min-width: 300px;
-      background: #f9f9f9;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
-    }
-
-    .pros h3 {
-      color: #2e7d32;
-      margin-bottom: 15px;
-    }
-
-    .cons h3 {
-      color: #c62828;
-      margin-bottom: 15px;
-    }
-
-    #prosList li, #consList li {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    #prosList li input, #consList li input {
-      width: 100%;
-      border: none;
-      outline: none;
-      background: transparent;
-      font-size: 14px;
-    }
-
-    .remove-btn {
-      background: transparent;
-      border: none;
-      color: #e53935;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    
-    /* Mobile styles */
-    @media(max-width:768px){ 
-      .hero {
-        height: auto;
-        min-height: 80vh;
-        flex-direction: column;
-        padding: 20px 0;
-      }
-      
-      .video-container {
-        position: relative;
-        height: 50vh;
-        width: 100%;
-        flex-shrink: 0;
-      }
-      
-      .hero::before {
-        display: none;
-      }
-      
-      .video-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(10, 35, 66, 0.3);
-        z-index: 1;
-      }
-      
-      .cta {
-        margin-top: 20px;
-        font-size: 16px;
-        padding: 12px 24px;
-        width: 90%;
-        max-width: 300px;
-      }
-
-      .pros-cons-container {
-        flex-direction: column;
-      }
-      
-      .pros, .cons {
-        min-width: 100%;
-      }
-    }
+    #pros-e-contras{background:#fff;padding:40px 20px;border-radius:12px;margin-top:40px;box-shadow:0 0 10px rgba(0,0,0,0.05)}
+    #pros-e-contras h2{text-align:center;color:#222;margin-bottom:30px}
+    .pros-cons-container{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+    .pros,.cons{flex:1;min-width:300px;background:#f9f9f9;border-radius:10px;padding:20px;box-shadow:inset 0 0 8px rgba(0,0,0,0.05)}
+    .pros h3{color:#2e7d32;margin-bottom:15px}
+    .cons h3{color:#c62828;margin-bottom:15px}
+    #prosList li,#consList li{background:#fff;border:1px solid #ddd;border-radius:8px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+    .product-image-container{width:100%;max-width:600px;margin:40px auto;text-align:center}
+    .product-image{width:100%;height:auto;border-radius:12px;box-shadow:0 8px 24px rgba(2,6,23,0.1);transition:transform 0.3s ease}
+    .product-image:hover{transform:scale(1.02)}
+    @media (max-width:600px){.video-container{max-width:100%}.cta{width:80%;font-size:16px}}
+    @media (max-width:768px){.pros-cons-container{flex-direction:column}.pros,.cons{min-width:100%}.product-image-container{max-width:100%;margin:30px auto}}
   </style>
   ${backgroundType === 'image' ? heroBackgroundHtml : ''}
 </head>
@@ -1228,44 +1361,46 @@ Resultados variam por pessoa</textarea>
   <div class="hero">
     ${backgroundType === 'video' ? heroBackgroundHtml : ''}
     <a class="cta" href="${escapeAttr(st.buyLink || '#')}">
-      <span style="display:block; font-size: 14px; margin-bottom: 5px;">I WANT MY</span>
+      <span style="display:block; font-size: 14px; margin-bottom: 5px;">${t.ctaLine1}</span>
       <span style="display:block; font-size: 22px; font-weight: 800;">${safe(st.productName).toUpperCase()} NOW</span>
     </a>
   </div>
   <div class="content">
     <section>
-      <h2>🌿 Rediscover Your Natural Vitality</h2>
-      <p><strong style="color:var(--accent)">${safe(st.productName)}</strong> is an all-natural formula designed to support her and enhance sexual drive. Made in the USA from a proprietary powerful natural ingredients, it promotes healthy blood flow supports overall vitality, improves energy, sleep quality, skin and inflammatory response.</p>
+      <h2>${t.section1Title}</h2>
+      <p><strong style="color:var(--accent)">${safe(st.productName)}</strong> ${t.section1Text}</p>
     </section>
 
     <section>
-      <h2>💥 Exclusive Benefits</h2>
+      <h2>${t.benefitsTitle}</h2>
       <div class="cards">${benefitsHtml}</div>
     </section>
+
+    ${productImageHtml}
 
     ${prosConsHtml}
 
     <section>
-      <h2>🌱 Selected Natural Ingredients</h2>
+      <h2>${t.ingredientsTitle}</h2>
       <div class="cards">${ingredientsHtml}</div>
     </section>
 
     <div style="text-align:center;margin:32px 0">
       <a class="cta" href="${escapeAttr(st.buyLink || '#')}">
-        <span style="display:block; font-size: 14px; margin-bottom: 5px;">I WANT MY</span>
+        <span style="display:block; font-size: 14px; margin-bottom: 5px;">${t.ctaLine1}</span>
         <span style="display:block; font-size: 22px; font-weight: 800;">${safe(st.productName).toUpperCase()} NOW</span>
       </a>
     </div>
 
     <section class="testimonials">
-      <h2>What customers are saying</h2>
+      <h2>${t.testimonialsTitle}</h2>
       <div class="reviews-grid">${reviewsHtml}</div>
-      <p style="font-size:12px;color:var(--muted);margin-top:8px">*Results may vary from person to person.</p>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">${t.testimonialsNote}</p>
     </section>
   </div>
 
   <footer>
-    <p>© ${new Date().getFullYear()} ${safe(st.productName)} — <a href="${escapeAttr(st.privacyUrl||'privacy.html')}">Privacy Policy</a> | <a href="${escapeAttr(st.termsUrl||'terms.html')}">Terms</a></p>
+    <p>© ${new Date().getFullYear()} ${safe(st.productName)} — <a href="${escapeAttr(st.privacyUrl||'privacy.html')}">${t.privacyText}</a> | <a href="${escapeAttr(st.termsUrl||'terms.html')}">${t.termsText}</a></p>
   </footer>
 </body>
 </html>
@@ -1273,6 +1408,20 @@ Resultados variam por pessoa</textarea>
       return exported;
     }
 
+    // EVENTS FOR CTA COLOR PICKERS
+    // update state & apply in real time
+    btnColorInput.addEventListener('input', (e) => {
+      state.btnColor = e.target.value;
+      applyCtaColors();
+      saveState(state);
+    });
+    btnColorHoverInput.addEventListener('input', (e) => {
+      state.btnColorHover = e.target.value;
+      applyCtaColors();
+      saveState(state);
+    });
+
+    /* end script */
   </script>
 </body>
 </html>
