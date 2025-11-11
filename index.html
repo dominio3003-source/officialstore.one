@@ -69,6 +69,8 @@
       font-size: 18px;
       text-align: center;
       line-height: 1.4;
+      width: auto;
+      max-width: 100%;
     }
 
     .cta:hover {
@@ -76,13 +78,49 @@
       box-shadow: 0 12px 28px rgba(251,191,36,0.35);
     }
 
-    /* === AJUSTE RESPONSIVO === */
-    @media (max-width: 600px) {
+    /* === AJUSTE RESPONSIVO PARA CELULAR === */
+    @media (max-width: 768px) {
       .video-container {
         max-width: 100%;
+        margin-bottom: 20px;
       }
+      
       .cta {
-        width: 80%;
+        width: 90%;
+        font-size: 16px;
+        padding: 16px 24px;
+        margin: 0 auto;
+        display: block;
+      }
+      
+      .cta span {
+        display: block;
+        line-height: 1.2;
+      }
+      
+      .cta span:first-child {
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+      
+      .cta span:last-child {
+        font-size: 18px;
+      }
+    }
+
+    /* Ajuste adicional para telas muito pequenas */
+    @media (max-width: 480px) {
+      .cta {
+        width: 95%;
+        padding: 14px 20px;
+        font-size: 15px;
+      }
+      
+      .cta span:first-child {
+        font-size: 12px;
+      }
+      
+      .cta span:last-child {
         font-size: 16px;
       }
     }
@@ -150,7 +188,7 @@
       padding:40px 20px;
       border-bottom:6px solid var(--accent-dark);
     }
-    header.preview-header h1{font-size:32px;margin:4px 0}
+    header.pview-header h1{font-size:32px;margin:4px 0}
     header.preview-header p{margin:6px 0;font-size:15px}
     .content{max-width:1100px;margin:32px auto;padding:0 20px}
     .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
@@ -296,7 +334,7 @@
     <aside class="editor" id="editor">
       <h2>Editor do Presell</h2>
 
-      <!-- NOVA SEÇÃO: IDIOMA -->
+      <!-- SEÇÃO: IDIOMA -->
       <div class="field">
         <label>🌐 Idioma da Presell</label>
         <select id="language">
@@ -425,6 +463,11 @@ Resultados variam por pessoa</textarea>
         <label>Terms (URL)</label>
         <input type="url" id="termsUrl" value="terms.html">
       </div>
+      <!-- NOVO CAMPO: Contact -->
+      <div class="field">
+        <label>Contact (URL)</label>
+        <input type="url" id="contactUrl" value="contact.html">
+      </div>
 
       <div class="section-divider"></div>
 
@@ -508,7 +551,12 @@ Resultados variam por pessoa</textarea>
         </section>
 
         <footer style="margin-top:40px">
-          <p>© <span id="footerYear"></span> <span id="footerProduct">Max Boost</span> — <a id="privacyLink" href="privacy/privacy.html" style="color:#dbeafe;text-decoration:underline">Privacy Policy</a> | <a id="termsLink" href="terms.html" style="color:#dbeafe;text-decoration:underline">Terms</a></p>
+          <p>© <span id="footerYear"></span> <span id="footerProduct">Max Boost</span> — 
+            <a id="privacyLink" href="privacy/privacy.html" style="color:#dbeafe;text-decoration:underline">Privacy Policy</a> | 
+            <a id="termsLink" href="terms.html" style="color:#dbeafe;text-decoration:underline">Terms</a> | 
+            <!-- NOVO LINK: Contact -->
+            <a id="contactLink" href="contact.html" style="color:#dbeafe;text-decoration:underline">Contact</a>
+          </p>
         </footer>
       </div>
     </main>
@@ -552,12 +600,14 @@ Resultados variam por pessoa</textarea>
       ],
       privacyUrl: "privacy/privacy.html",
       termsUrl: "terms.html",
+      // NOVO CAMPO: Contact URL
+      contactUrl: "contact.html",
       // defaults for CTA colors
       btnColor: "#f59e0b",
       btnColorHover: "#fbbf24",
-      // Novo campo para imagem do produto
+      // Campo para imagem do produto
       productImageUrl: "",
-      // Novo campo para idioma
+      // Campo para idioma
       language: "en"
     };
 
@@ -576,7 +626,8 @@ Resultados variam por pessoa</textarea>
         testimonialsTitle: "What customers are saying",
         testimonialsNote: "*Results may vary from person to person.",
         privacyText: "Privacy Policy",
-        termsText: "Terms"
+        termsText: "Terms",
+        contactText: "Contact"
       },
       pt: {
         ctaLine1: "EU QUERO MEU",
@@ -591,7 +642,8 @@ Resultados variam por pessoa</textarea>
         testimonialsTitle: "O que os clientes estão dizendo",
         testimonialsNote: "*Resultados podem variar de pessoa para pessoa.",
         privacyText: "Política de Privacidade",
-        termsText: "Termos de Uso"
+        termsText: "Termos de Uso",
+        contactText: "Contato"
       },
       es: {
         ctaLine1: "YO QUIERO MI",
@@ -606,7 +658,8 @@ Resultados variam por pessoa</textarea>
         testimonialsTitle: "Lo que dicen los clientes",
         testimonialsNote: "*Los resultados pueden variar de persona a persona.",
         privacyText: "Política de Privacidad",
-        termsText: "Términos y Condiciones"
+        termsText: "Términos y Condiciones",
+        contactText: "Contacto"
       },
       fr: {
         ctaLine1: "JE VEUX MON",
@@ -621,7 +674,8 @@ Resultados variam por pessoa</textarea>
         testimonialsTitle: "Ce que disent les clients",
         testimonialsNote: "*Les résultats peuvent varier d'une personne à l'autre.",
         privacyText: "Politique de Confidentialité",
-        termsText: "Conditions d'Utilisation"
+        termsText: "Conditions d'Utilisation",
+        contactText: "Contact"
       }
     };
 
@@ -670,6 +724,8 @@ Resultados variam por pessoa</textarea>
     const footerProduct = document.getElementById("footerProduct");
     const privacyLink = document.getElementById("privacyLink");
     const termsLink = document.getElementById("termsLink");
+    // NOVO: Link de Contact
+    const contactLink = document.getElementById("contactLink");
     const addBenefitBtn = document.getElementById("addBenefit");
     const newBenefitInput = document.getElementById("newBenefit");
     const addIngredientBtn = document.getElementById("addIngredient");
@@ -680,6 +736,8 @@ Resultados variam por pessoa</textarea>
     const resetBtn = document.getElementById("resetBtn");
     const privacyUrlInput = document.getElementById("privacyUrl");
     const termsUrlInput = document.getElementById("termsUrl");
+    // NOVO: Input para Contact URL
+    const contactUrlInput = document.getElementById("contactUrl");
     const statusMessage = document.getElementById("statusMessage");
 
     // New: btn color inputs
@@ -691,7 +749,7 @@ Resultados variam por pessoa</textarea>
     const productImageSection = document.getElementById("productImageSection");
     const productImage = document.getElementById("productImage");
 
-    // Novo: Input para idioma
+    // Input para idioma
     const languageInput = document.getElementById("language");
 
     // Elementos de texto para tradução
@@ -746,6 +804,7 @@ Resultados variam por pessoa</textarea>
       // Atualizar links de footer
       privacyLink.textContent = t.privacyText;
       termsLink.textContent = t.termsText;
+      contactLink.textContent = t.contactText;
     }
 
     /* init inputs */
@@ -761,6 +820,8 @@ Resultados variam por pessoa</textarea>
       consTextInput.value = (state.cons || DEFAULT.cons).join('\n');
       privacyUrlInput.value = state.privacyUrl || DEFAULT.privacyUrl;
       termsUrlInput.value = state.termsUrl || DEFAULT.termsUrl;
+      // NOVO: Preencher contactUrl
+      contactUrlInput.value = state.contactUrl || DEFAULT.contactUrl;
       productImageUrlInput.value = state.productImageUrl || DEFAULT.productImageUrl;
       languageInput.value = state.language || DEFAULT.language;
 
@@ -1072,6 +1133,8 @@ Resultados variam por pessoa</textarea>
       footerProduct.textContent = state.productName;
       privacyLink.href = state.privacyUrl || DEFAULT.privacyUrl;
       termsLink.href = state.termsUrl || DEFAULT.termsUrl;
+      // NOVO: Atualizar link de Contact
+      contactLink.href = state.contactUrl || DEFAULT.contactUrl;
       renderBenefits();
       renderProsCons();
       renderIngredients();
@@ -1102,6 +1165,8 @@ Resultados variam por pessoa</textarea>
     });
     privacyUrlInput.addEventListener("input", e=>{ state.privacyUrl = e.target.value; renderAll(); });
     termsUrlInput.addEventListener("input", e=>{ state.termsUrl = e.target.value; renderAll(); });
+    // NOVO: Event listener para contactUrl
+    contactUrlInput.addEventListener("input", e=>{ state.contactUrl = e.target.value; renderAll(); });
     
     // Event listener para a URL da imagem do produto
     productImageUrlInput.addEventListener("input", e=>{ 
@@ -1109,7 +1174,7 @@ Resultados variam por pessoa</textarea>
       renderAll(); 
     });
 
-    // Novo: Event listener para o idioma
+    // Event listener para o idioma
     languageInput.addEventListener("change", e=>{ 
       state.language = e.target.value; 
       renderAll(); 
@@ -1325,7 +1390,7 @@ Resultados variam por pessoa</textarea>
     .hero{min-height:70vh;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 15px;box-sizing:border-box;background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%)}
     .video-container{width:100%;max-width:800px;aspect-ratio:16/9;margin-bottom:25px}
     .video-container iframe{width:100%;height:100%;border:none;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(2,6,23,0.08)}
-    .cta{background:linear-gradient(90deg,var(--accent-dark),var(--accent));color:#072033;padding:15px 30px;border-radius:50px;text-decoration:none;font-weight:700;display:inline-block;box-shadow:0 8px 24px rgba(251,191,36,0.25);transition:all 0.3s;font-size:18px;text-align:center;line-height:1.4}
+    .cta{background:linear-gradient(90deg,var(--accent-dark),var(--accent));color:#072033;padding:15px 30px;border-radius:50px;text-decoration:none;font-weight:700;display:inline-block;box-shadow:0 8px 24px rgba(251,191,36,0.25);transition:all 0.3s;font-size:18px;text-align:center;line-height:1.4;width:auto;max-width:100%}
     .cta:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(251,191,36,0.35)}
     .content{max-width:1100px;margin:32px auto;padding:0 20px}
     .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:16px}
@@ -1348,8 +1413,8 @@ Resultados variam por pessoa</textarea>
     .product-image-container{width:100%;max-width:600px;margin:40px auto;text-align:center}
     .product-image{width:100%;height:auto;border-radius:12px;box-shadow:0 8px 24px rgba(2,6,23,0.1);transition:transform 0.3s ease}
     .product-image:hover{transform:scale(1.02)}
-    @media (max-width:600px){.video-container{max-width:100%}.cta{width:80%;font-size:16px}}
-    @media (max-width:768px){.pros-cons-container{flex-direction:column}.pros,.cons{min-width:100%}.product-image-container{max-width:100%;margin:30px auto}}
+    @media (max-width:768px){.video-container{max-width:100%;margin-bottom:20px}.cta{width:90%;font-size:16px;padding:16px 24px;margin:0 auto;display:block}.cta span{display:block;line-height:1.2}.cta span:first-child{font-size:13px;margin-bottom:4px}.cta span:last-child{font-size:18px}.pros-cons-container{flex-direction:column}.pros,.cons{min-width:100%}.product-image-container{max-width:100%;margin:30px auto}}
+    @media (max-width:480px){.cta{width:95%;padding:14px 20px;font-size:15px}.cta span:first-child{font-size:12px}.cta span:last-child{font-size:16px}}
   </style>
   ${backgroundType === 'image' ? heroBackgroundHtml : ''}
 </head>
@@ -1400,7 +1465,12 @@ Resultados variam por pessoa</textarea>
   </div>
 
   <footer>
-    <p>© ${new Date().getFullYear()} ${safe(st.productName)} — <a href="${escapeAttr(st.privacyUrl||'privacy.html')}">${t.privacyText}</a> | <a href="${escapeAttr(st.termsUrl||'terms.html')}">${t.termsText}</a></p>
+    <p>© ${new Date().getFullYear()} ${safe(st.productName)} — 
+      <a href="${escapeAttr(st.privacyUrl||'privacy.html')}">${t.privacyText}</a> | 
+      <a href="${escapeAttr(st.termsUrl||'terms.html')}">${t.termsText}</a> | 
+      <!-- NOVO LINK: Contact no HTML exportado -->
+      <a href="${escapeAttr(st.contactUrl||'contact.html')}">${t.contactText}</a>
+    </p>
   </footer>
 </body>
 </html>
